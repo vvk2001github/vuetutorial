@@ -1,9 +1,14 @@
 <template>
     <form>
         <h4>Create post...</h4>
-        <input v-model="post.title" class="input" type="text" placeholder="Title">
-        <input v-model="post.body" class="input" type="text" placeholder="Description">
-        <button class="btn" @click.prevent="createPost">Create</button>
+        <my-input v-model="post.title" type="text" placeholder="Title"/>
+        <my-input v-model="post.body" type="text" placeholder="Description"/>
+        <my-button 
+            @click.prevent="createPost"
+            style="align-self: flex-end; margin-top: 15px;"
+        >
+            Create
+        </my-button>
     </form>
 </template>
 
@@ -37,19 +42,4 @@ form {
     flex-direction: column;
 }
 
-.btn {
-    margin-top: 15px;
-    align-self: flex-end;
-    padding: 10px 15px;
-    background: none;
-    color: teal;
-    border: 1px solid teal;
-}
-
-.input {
-    width: 100%;
-    border: 1px solid teal;
-    padding: 10px 15px;
-    margin-top: 15px;
-}
 </style>
