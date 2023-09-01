@@ -1,30 +1,40 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+    <div>
+        <div :key="index" class="post" v-for="(post, index) in posts">
+            <div><strong>Title: </strong>{{ post.title }}</div>
+            <div><strong>Description: </strong>{{ post.body }}</div>
+        </div>
+    </div>
 </template>
 
+<script>
+export default {
+    data() {
+        return {
+            posts: [
+                {id: 1, title: 'Title1', body: 'Post number 1'},
+                {id: 2, title: 'Title2', body: 'Post number 2'},
+                {id: 3, title: 'Title3', body: 'Post number 3'},
+            ]
+        }
+    },
+
+    methods: {
+        
+    },
+}
+</script>
+
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-nav {
-  padding: 30px;
-}
-
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
+.post {
+    padding: 15px;
+    border: 2px solid teal;
+    margin-top: 15px;
 }
 </style>
