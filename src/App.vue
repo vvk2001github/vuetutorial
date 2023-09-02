@@ -3,7 +3,12 @@
         <h1>
             Page with posts
         </h1>
-        <my-button @click="showDialog" style="margin: 15px 0;">Create post</my-button>
+
+        <div class="app_buttons">
+            <my-button @click="showDialog">Create post</my-button>
+            <my-select v-model="selectedSort" :options="sortOptions"></my-select>
+        </div>
+        
         <my-dialog v-model:show="dialogVisible">
             <post-form @create="createPost"/>
         </my-dialog>
@@ -15,6 +20,7 @@
 <script>
 import PostForm from '@/components/PostForm.vue';
 import PostList from '@/components/PostList.vue';
+import MySelect from '@/components/UI/MySelect.vue'
 import axios from 'axios';
 
 export default {
@@ -22,6 +28,7 @@ export default {
     components: {
     PostForm,
     PostList,
+    MySelect,
 },
 
     data() {
@@ -29,6 +36,11 @@ export default {
             posts: [],
             dialogVisible: false,
             isPostLoading: false,
+            selectedSort: '',
+            sortOptions: [
+                {value: 'title', name: 'By title'},
+                {value: 'body', name: 'By body'},
+            ],
         }
     },
 
@@ -73,5 +85,10 @@ export default {
     padding: 20px;
 }
 
+.app_buttons {
+    margin: 15px 0;
+    display: flex;
+    justify-content: space-between;
+}
 
 </style>
