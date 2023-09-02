@@ -7,13 +7,16 @@
         <my-dialog v-model:show="dialogVisible">
             <post-form @create="createPost"/>
         </my-dialog>
-        <post-list :posts="posts" @remove="removePost"/>
+        <post-list v-if="!isPostLoading" :posts="posts" @remove="removePost"/>
+        <div v-else>Loading.......</div>
     </div>
 </template>
 
 <script>
 import PostForm from '@/components/PostForm.vue';
-import PostList from '@/components/PostList.vue'
+import PostList from '@/components/PostList.vue';
+import axios from 'axios';
+
 export default {
 
     components: {
@@ -23,12 +26,9 @@ export default {
 
     data() {
         return {
-            posts: [
-                {id: 1, title: 'Title1', body: 'Post number 1'},
-                {id: 2, title: 'Title2', body: 'Post number 2'},
-                {id: 3, title: 'Title3', body: 'Post number 3'},
-            ],
+            posts: [],
             dialogVisible: false,
+            isPostLoading: false,
         }
     },
 
@@ -42,7 +42,22 @@ export default {
         },
         showDialog() {
             this.dialogVisible = true;
+        },
+        async fetchPosts() {
+            try {
+                this.isPostLoading = true;
+                const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10');
+                this.posts = response.data;
+            } catch (error) {
+                alert('Error');
+            } finally {
+                this.isPostLoading = false;
+            };
         }
+    },
+
+    mounted() {
+        this.fetchPosts();
     },
 }
 </script>
