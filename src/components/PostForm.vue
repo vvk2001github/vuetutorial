@@ -13,7 +13,11 @@
 </template>
 
 <script>
+import MyInput from '@/components/UI/MyInput.vue';
     export default {
+        components: {
+            MyInput,
+        },
         data() {
             return {
                 post: {
