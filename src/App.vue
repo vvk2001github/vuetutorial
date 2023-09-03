@@ -16,6 +16,16 @@
         </my-dialog>
         <post-list v-if="!isPostLoading" :posts="sortedAndSearchedPosts" @remove="removePost"/>
         <div v-else>Loading.......</div>
+        <div class="page__wrapper">
+            <div 
+                v-for="pageNumber in totalPage" 
+                :key="pageNumber" class="page" 
+                :class="{'current_page': page === pageNumber}"
+                @click="changePage(pageNumber)"
+            >
+                {{ pageNumber }}
+            </div>
+        </div>
     </div>
 </template>
 
@@ -43,6 +53,9 @@ export default {
             dialogVisible: false,
             isPostLoading: false,
             selectedSort: '',
+            page: 1,
+            limit: 10,
+            totalPage: 0,
             sortOptions: [
                 {value: 'title', name: 'By title'},
                 {value: 'body', name: 'By body'},
@@ -65,13 +78,22 @@ export default {
         async fetchPosts() {
             try {
                 this.isPostLoading = true;
-                const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10');
+                const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_', {
+                    params: {
+                        _page: this.page,
+                        _limit: this.limit,
+                    }
+                });
+                this.totalPage = Math.ceil(response.headers['x-total-count'] / this.limit);
                 this.posts = response.data;
             } catch (error) {
                 alert('Error');
             } finally {
                 this.isPostLoading = false;
             };
+        },
+        changePage(pageNumber) {
+            this.page =pageNumber;
         }
     },
 
@@ -90,6 +112,11 @@ export default {
             return this.sortedPosts.filter(post => post.title.toLowerCase().includes(this.searchQuery.toLowerCase()));
         },
     
+    },
+    watch: {
+        page(newValue, oldValue) {
+            this.fetchPosts();
+        }
     },
 }
 </script>
@@ -111,4 +138,17 @@ export default {
     justify-content: space-between;
 }
 
+.page__wrapper {
+    display: flex;
+    margin-top: 15px;
+}
+
+.page {
+    border: 1px solid black;
+    padding: 10px;
+}
+
+.current_page {
+    border: 2px solid teal;
+}
 </style>
